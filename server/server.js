@@ -19,7 +19,9 @@ const io = require("socket.io")(server, {
     origin: "*",
   },
 });
+
 let onlineUsers = [];
+
 io.on("connection", (socket) => {
   socket.on("came-online", (userId) => {
     if (!onlineUsers.includes(userId)) {
@@ -53,12 +55,12 @@ const path = require("path");
 __dirname = path.resolve();
 // heroku deployment
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("client/build"));
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  server.use(express.static(path.join(__dirname, "/client/build")));
+  server.get("*", (req, res) => {
+    res.sendFile(path.join(__dirname, "client", "build", "index.html"));
   });
 }
 
-app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+server.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
