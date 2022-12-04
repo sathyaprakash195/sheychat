@@ -49,6 +49,16 @@ io.on("connection", (socket) => {
   });
 });
 
+const path = require("path");
+__dirname = path.resolve();
+// heroku deployment
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("client/build"));
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
+
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
